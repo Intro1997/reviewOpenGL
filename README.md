@@ -1,5 +1,5 @@
 # reviewOpenGL
-This project is used to review OpenGL and learn Github
+  This project is used to review OpenGL and learn Github
 
 # Uploaded files formats
 1. *.graffle: These files are created by OmniGraffle which is used to draw the flow graphics.
