@@ -1,0 +1,1 @@
+    At this version, I update the cube.fs file. I use the material class to replace the strength of each lighting component and the light class to replace light in the previous fragment shader. And the entrance of application should be updated accordingly.
