@@ -3,6 +3,8 @@ struct Material{
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
+    
+    float shininess;
 };
 
 uniform Material material;
@@ -39,7 +41,7 @@ void main(){
     // specular
     vec3 reflectDir = reflect(-lightDir, norm);
     vec3 viewDir = normalize(viewPos - FragPos);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     vec3 specular = spec * light.specular * material.specular;
     
     // result
