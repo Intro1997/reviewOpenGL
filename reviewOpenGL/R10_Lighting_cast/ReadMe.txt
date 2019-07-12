@@ -1,0 +1,1 @@
+    The smooth edge that I write in file "cube.fs" is different from the LearnOpenGL tutorial in logical where the tutorial create an out_border out of the cutoff but I create the border inside the cutoff. And I also haven't used the formula of smooth strictly(like the epsilon parameter) but there are the same.
