@@ -1,0 +1,1 @@
+    The key of this tutorial is use texture to replace the diffuse and specular color to make each components of an object have it own lighting effect.
