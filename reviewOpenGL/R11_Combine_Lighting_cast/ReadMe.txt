@@ -1,0 +1,1 @@
+    This version combine the direction, diffuse and specular light in the "cube.fs" file. And fix the dark circle when use flash light(the dark circle is create by setting the range of inner and outer to 0.0 to 1.0, when I set this [0.0, 1.0] range to the cutoff).
