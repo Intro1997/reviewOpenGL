@@ -1,0 +1,1 @@
+These codes are used to load a model by Assimp. I wrote two version of model fragment shader file(one includes three lighting cast and another don't)
