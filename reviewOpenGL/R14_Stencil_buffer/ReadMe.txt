@@ -1,0 +1,1 @@
+    Instead of using not obvious color in tutorial, I set the border color to pure white. And I reduce the origin containers volume by 0.2 times, then use origin volume as origin containers for border.
