@@ -1,0 +1,1 @@
+This chapter is easy and the code is as same as tutorial but using Blending chapter's codes.
