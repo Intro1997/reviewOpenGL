@@ -1,0 +1,1 @@
+I try to use texture to store depth and stencil instead of using render buffer object. This texture shouldn't read by fragment shader.

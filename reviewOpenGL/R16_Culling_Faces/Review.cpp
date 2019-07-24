@@ -80,9 +80,6 @@ int main()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);    
-
     
     // build and compile shaders
     // -------------------------
@@ -192,7 +189,7 @@ int main()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
     glEnableVertexAttribArray(1);
-    glBindVertexArray(0);        
+    glBindVertexArray(0);
     
     // load textures
     // -------------
@@ -200,33 +197,7 @@ int main()
     unsigned int floorTexture = loadTexture("img/wall.jpg");
     
     unsigned int glassTexture = loadTexture("img/glass.png");
-//    glGenTextures(1, &glassTexture);
-//    glBindTexture(GL_TEXTURE_2D, glassTexture);
-//    int width, height, urChannel;
-//    unsigned char *data = stbi_load("img/glass.png", &width, &height, &urChannel, 0);
-//    if(data){
-//        GLenum format;
-//        if(urChannel == 1)
-//            format = GL_RED;
-//        if(urChannel == 3)
-//            format = GL_RGB;
-//        if(urChannel == 4)
-//            format = GL_RGBA;
-//
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//
-//        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-//        glGenerateMipmap(GL_TEXTURE_2D);
-//        stbi_image_free(data);
-//    }
-//    else{
-//        cout << "ERROR::STB_LOAD::Load texture falied\n";
-//        stbi_image_free(data);
-//    }
-//
+    
     // shader configuration
     // --------------------
     cubeShader.use();
@@ -337,16 +308,16 @@ int main()
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
+        glfwSetWindowShouldClose(window, true);
     
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    camera.processKeyboard(FORWARD, deltaTime);
+        camera.processKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    camera.processKeyboard(BACKWARD, deltaTime);
+        camera.processKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    camera.processKeyboard(LEFT, deltaTime);
+        camera.processKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    camera.processKeyboard(RIGHT, deltaTime);
+        camera.processKeyboard(RIGHT, deltaTime);
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -398,11 +369,11 @@ unsigned int loadTexture(char const *path)
     {
         GLenum format;
         if (nrComponents == 1)
-        format = GL_RED;
+            format = GL_RED;
         else if (nrComponents == 3)
-        format = GL_RGB;
+            format = GL_RGB;
         else if (nrComponents == 4)
-        format = GL_RGBA;
+            format = GL_RGBA;
         
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
