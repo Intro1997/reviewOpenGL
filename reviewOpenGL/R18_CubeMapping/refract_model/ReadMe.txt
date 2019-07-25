@@ -1,0 +1,1 @@
+The refract effect is easy so I just upload the model fragment shader. You can alert the model.fs codes in mirror_model folder by this fragment shader codes(the model.fs in refract_model folder).
