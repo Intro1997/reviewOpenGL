@@ -1,0 +1,2 @@
+&emsp;&emsp;I do some extra effect on the origin code that I add circulation motion and planet rotation. Since my MacBook Pro 2017's display card isn't high end, the 1000000 rockets is too high for my laptop computer. So I set the amout to 100000 and after I adding the motion to the model, the framerate is little bit low.
+&emsp;&emsp;And there is a problem in the effect that the ring isn't a standard circle, and I don't know why. I will be glad if you can point that.
