@@ -1,0 +1,1 @@
+&emsp;&emsp;The custom mutisample isn't write in detail in tutorial. Although the author gives the fragment code in comments of customing a mutisample, I don't want to try it because I do not have some reasons to use it in my application and I'm sorry for that.
