@@ -24,6 +24,8 @@ void renderScene(const Shader shader);
 void renderCube();
 void renderQuad();
 
+
+
 // size settings
 const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
@@ -53,11 +55,11 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    
+
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
-    
+
     // glfw window creation
     // --------------------
     GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
@@ -72,7 +74,7 @@ int main()
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);        // tell GLFW to capture our mouse
-    
+
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -80,22 +82,57 @@ int main()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-    
+
     // Enable Depth Test
     // -----------------
     glEnable(GL_DEPTH_TEST);
-    
+    glEnable(GL_CULL_FACE);
+
     // Set floor vertex
     // ----------------------
     float planeVertices[] = {
-        // positions            // normals         // texcoords
-        25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-        -25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-        -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-        
-        25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-        -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-        25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 10.0f
+        // back face
+        -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
+        1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 25.0f, 25.0f, // top-right
+        1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 25.0f, 0.0f, // bottom-right
+        1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 25.0f, 25.0f, // top-right
+        -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, // bottom-left
+        -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, -1.0f, 0.0f, 25.0f, // top-left
+        // front face
+        -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
+        1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 25.0f, 0.0f, // bottom-right
+        1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 25.0f, 25.0f, // top-right
+        1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 25.0f, 25.0f, // top-right
+        -1.0f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 25.0f, // top-left
+        -1.0f, -1.0f,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f, // bottom-left
+        // left face
+        -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 25.0f, 0.0f, // top-right
+        -1.0f,  1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 25.0f, 25.0f, // top-left
+        -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 25.0f, // bottom-left
+        -1.0f, -1.0f, -1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 25.0f, // bottom-left
+        -1.0f, -1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-right
+        -1.0f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f, 25.0f, 0.0f, // top-right
+        // right face
+        1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 25.0f, 0.0f, // top-left
+        1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 25.0f, // bottom-right
+        1.0f,  1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 25.0f, 25.0f, // top-right
+        1.0f, -1.0f, -1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 25.0f, // bottom-right
+        1.0f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 25.0f, 0.0f, // top-left
+        1.0f, -1.0f,  1.0f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f, // bottom-left
+        // bottom face
+        -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 25.0f, // top-right
+        1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 25.0f, 25.0f, // top-left
+        1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 25.0f, 0.0f, // bottom-left
+        1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 25.0f, 0.0f, // bottom-left
+        -1.0f, -1.0f,  1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f, // bottom-right
+        -1.0f, -1.0f, -1.0f,  0.0f, -1.0f,  0.0f, 0.0f, 25.0f, // top-right
+        // top face
+        -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 25.0f, // top-left
+        1.0f,  1.0f , 1.0f,  0.0f,  1.0f,  0.0f, 25.0f, 0.0f, // bottom-right
+        1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 25.0f, 25.0f, // top-right
+        1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 25.0f, 0.0f, // bottom-right
+        -1.0f,  1.0f, -1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 25.0f, // top-left
+        -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left
     };
     unsigned int planeVBO;
     glGenVertexArrays(1, &planeVAO);
@@ -111,33 +148,28 @@ int main()
     glEnableVertexAttribArray(2);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    
-    // Set shader
-    // ----------
-    Shader sampleDepthShader("shader/sampleDepth.vs", "shader/sampleDepth.fs");
-    Shader quadShader("shader/debugQuad.vs", "shader/debugQuad.fs");
-    
+
+
     // set texture
     // -----------
     unsigned int floorTexture = loadTexture("img/wood.png");
-    
+
     // Create FBO
     // ----------
     unsigned int depthFBO;
     glGenFramebuffers(1, &depthFBO);
-    
+
     // Create depth texture
     // --------------------
     unsigned int depthMap;
     glGenTextures(1, &depthMap);
     glBindTexture(GL_TEXTURE_2D, depthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SCR_WIDTH, SCR_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_WIDTH, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glBindTexture(GL_TEXTURE_2D, 0);
-    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
     // Bind Texture to FBO
     // -------------------
     glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
@@ -145,61 +177,92 @@ int main()
     glReadBuffer(GL_NONE);
     glDrawBuffer(GL_NONE);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
     
+    // Load floor texture
+    // ------------------
+//    unsigned int floorTexture = loadTexture("img/wood.png");
     
-    // render loop
-    // -----------
+    // build and compile shaders
+    // -------------------------
+    Shader sampleDepthShader("shader/sampleDepth.vs", "shader/sampleDepth.fs");
+    Shader quadShader("shader/debugQuad.vs", "shader/debugQuad.fs");
+    Shader shader("shader/shader.vs", "shader/shader.fs");
+
+//     render loop
+//     -----------
     while(!glfwWindowShouldClose(window))
     {
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        
+
         processInput(window);
         // get the depth value
         // -------------------
         glClearColor(0.1, 0.1, 0.1, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glCullFace(GL_FRONT);
         glm::mat4 model = glm::mat4(1.0);
-        float near_plane = 1.0, far_plane = 10.0;
+        float near_plane = 0.1, far_plane = 7.5;
         glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
         glm::mat4 lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-        glm::mat4 lightTransformMatrix = lightProjection * lightView;
+        glm::mat4 lightSpaceMatrix = lightProjection * lightView;
         sampleDepthShader.use();
         sampleDepthShader.setMat4("model", model);
-        sampleDepthShader.setMat4("lightTransformMatrix", lightTransformMatrix);
+        sampleDepthShader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER, depthFBO);
         glClear(GL_DEPTH_BUFFER_BIT);
         glBindTexture(GL_TEXTURE_2D, floorTexture);
         renderScene(sampleDepthShader);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        
-        // Start the debug
+
+        // rendering
         // ---------------
-        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+        // glCullFace(GL_BACK);      // It's better to cull back face
+        glDisable(GL_CULL_FACE);    // It's ok to disable because the shadow acne will be resolved by shadow calculation in fragment shader
+        glViewport(0, 0, SCR_WIDTH * 2, SCR_HEIGHT * 2);
         glClearColor(1.0, 1.0, 1.0, 1.0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        quadShader.use();
+        glm::mat4 view = camera.getViewMatrix();
+        glm::mat4 projection = glm::perspective(camera.Zoom, (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        shader.use();
+        shader.setMat4("lightSpaceMatrix", lightSpaceMatrix);
+        shader.setMat4("view", view);
+        shader.setMat4("projection", projection);
+        shader.setVec3("lightPos", lightPos);
+        shader.setVec3("viewPos", camera.Position);
+        shader.setInt("diffuseTexture", 0);
+        shader.setInt("shadowMap", 1);
         glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, floorTexture);
+        glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, depthMap);
-        renderQuad();
-        
+        renderScene(shader);
+
+        glEnable(GL_CULL_FACE);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
-    
+
     glfwTerminate();
     return 0;
 }
 
-// Render Scene function
-// ---------------------
 void renderScene(const Shader shader){
+    // paint floor
     glm::mat4 model = glm::mat4(1.0);
+//    model = glm::translate(model, glm::vec3(0.0, -0.75, 0.0));
+//    model = glm::scale(model, glm::vec3(25.0, 0.25, 25.0));
+    model = glm::translate(model, glm::vec3(0.0, -0.625, 0.0));
+    model = glm::scale(model, glm::vec3(25.0, 0.125, 25.0));
     shader.setMat4("model", model);
+
     glBindVertexArray(planeVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
     
     model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
@@ -218,12 +281,11 @@ void renderScene(const Shader shader){
     shader.setMat4("model", model);
     renderCube();
 }
-
-// Render Cube function
-// --------------------
 unsigned int cubeVAO = 0;
-unsigned int cubeVBO;
+unsigned int cubeVBO = 0;
 void renderCube(){
+    // cube vertex
+    // -----------
     if(cubeVAO == 0){
         float cubeVertices[] = {
             // back face
@@ -270,8 +332,8 @@ void renderCube(){
             -1.0f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f  // bottom-left
         };
         glGenVertexArrays(1, &cubeVAO);
-        glGenBuffers(1, &cubeVBO);
         glBindVertexArray(cubeVAO);
+        glGenBuffers(1, &cubeVBO);
         glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
@@ -282,14 +344,13 @@ void renderCube(){
         glEnableVertexAttribArray(2);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
+        
     }
     glBindVertexArray(cubeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
 }
 
-// render quad function
-// --------------------
 unsigned int quadVAO = 0;
 unsigned int quadVBO;
 void renderQuad(){
@@ -302,8 +363,8 @@ void renderQuad(){
             1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
         };
         glGenVertexArrays(1, &quadVAO);
-        glGenBuffers(1, &quadVBO);
         glBindVertexArray(quadVAO);
+        glGenBuffers(1, &quadVBO);
         glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -323,17 +384,31 @@ void renderQuad(){
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-    glfwSetWindowShouldClose(window, true);
+        glfwSetWindowShouldClose(window, true);
     
     // Camera move
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    camera.processKeyboard(FORWARD, deltaTime);
+        camera.processKeyboard(FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    camera.processKeyboard(BACKWARD, deltaTime);
+        camera.processKeyboard(BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    camera.processKeyboard(LEFT, deltaTime);
+        camera.processKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    camera.processKeyboard(RIGHT, deltaTime);
+        camera.processKeyboard(RIGHT, deltaTime);
+    
+    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS){
+        lightPos += glm::vec3(0.0, deltaTime, 0.0);
+    }
+    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS){
+        lightPos -= glm::vec3(0.0, deltaTime, 0.0);
+    }
+    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS){
+        lightPos -= glm::vec3(deltaTime, 0.0, 0.0);
+    }
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS){
+        lightPos += glm::vec3(deltaTime, 0.0, 0.0);
+    }
+    
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -355,13 +430,13 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
         lastY = ypos;
         firstMouse = false;
     }
-    
+
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-    
+
     lastX = xpos;
     lastY = ypos;
-    
+
     camera.processMouseMovement(xoffset, yoffset, true);
 }
 
@@ -378,7 +453,7 @@ unsigned int loadTexture(char const *path)
 {
     unsigned int textureID;
     glGenTextures(1, &textureID);
-    
+
     int width, height, nrComponents;
     unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
     if(data)
@@ -390,16 +465,16 @@ unsigned int loadTexture(char const *path)
         format = GL_RGB;
         else if (nrComponents == 4)
         format = GL_RGBA;
-        
+
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-        
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        
+
         stbi_image_free(data);
     }
     else
@@ -407,7 +482,7 @@ unsigned int loadTexture(char const *path)
         std::cout << "Texture failed to load at path: " << path << std::endl;
         stbi_image_free(data);
     }
-    
+
     return textureID;
 }
 
@@ -415,7 +490,7 @@ unsigned int loadCubemap(vector<string> faces){
     unsigned int textureID;
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-    
+
     int width, height, urChannel;
     for(int i = 0; i < faces.size(); i++){
         unsigned char *data = stbi_load(("skybox/" + faces[i]).c_str(), &width, &height, &urChannel, 0);
@@ -427,7 +502,7 @@ unsigned int loadCubemap(vector<string> faces){
             format = GL_RGB;
             if(urChannel == 4)
             format = GL_RGBA;
-            
+
             //            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
             stbi_image_free(data);
@@ -442,7 +517,6 @@ unsigned int loadCubemap(vector<string> faces){
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    
+
     return textureID;
 }
-
