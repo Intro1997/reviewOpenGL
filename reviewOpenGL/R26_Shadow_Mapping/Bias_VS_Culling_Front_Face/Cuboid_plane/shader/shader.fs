@@ -30,26 +30,26 @@ float calculateShadowValue(vec4 FragPosSpaceLight){
     vec3 projCoords = FragPosSpaceLight.xyz / FragPosSpaceLight.w;
     projCoords = (projCoords + 1.0) * 0.5;
     float closetDepthValue = texture(shadowMap, projCoords.xy).r;
-    float bias = 0.05;
     float currentDepthValue = projCoords.z;
-    return currentDepthValue - 0.05 > closetDepthValue ? 1.0 : 0.0;
+    float bias = 0.0;   // Use Front culling instead of bias
+    return currentDepthValue - bias > closetDepthValue ? 1.0 : 0.0;
 }
 
 void main(){
     vec3 normal = normalize(fs_in.Normal);
-
+    
     // ambient light
     float ambientStrength = 0.5;
     vec3 ambient =  texture(diffuseTexture, fs_in.TexCoord).rgb * ambientStrength;
-
+    
     // diffuse light
     vec3 lightDir = normalize(lightPos - fs_in.FragPos);
     vec3 diffuse = diffuseCalculate(normal, lightDir);
-
+    
     // specular light
     vec3 specular;
     specular = specularCalculate(normal, lightDir);
-
+    
     // attenuation
     float contanst = 1.0;
     float Distance;
@@ -60,7 +60,7 @@ void main(){
     attenuation = 1.0 / (1.0 + linearPar * Distance + quadraticPar * Distance * Distance);
     float shadow = calculateShadowValue(fs_in.FragPosSpaceLight);
     vec4 result = vec4((ambient + (1.0 - shadow) * (diffuse + specular)), 1.0) * attenuation;
-
+    
     FragColor = result;
 }
 
