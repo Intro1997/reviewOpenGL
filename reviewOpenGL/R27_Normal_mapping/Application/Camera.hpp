@@ -35,16 +35,16 @@ public:
     float mouseSensitivity;
     float movementSpeed;
     float Zoom;
-
+    
     Camera(glm::vec3 position = glm::vec3(0.0, 0.0, 0.0), glm::vec3 worldup = glm::vec3(0.0, 1.0, 0.0),  float yaw = YAW, float pitch = PITCH) :
     Front(glm::vec3(0.0, 0.0, -1.0)), mouseSensitivity(SENSITIVITY), movementSpeed(SPEED), Zoom(ZOOM){
         Position = position;
         worldUp = worldup;
         Yaw = yaw;
-        Pitch = pitch;
+        Pitch = Pitch;
         updateCameraVertex();
     }
-
+    
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) :
     Front(glm::vec3(0.0, 0.0, -1.0)), mouseSensitivity(SENSITIVITY), movementSpeed(SPEED), Zoom(ZOOM){
         Position = glm::vec3(posX, posY, posZ);
@@ -55,7 +55,6 @@ public:
     }
     
     glm::mat4 getViewMatrix(){
-        
         return glm::lookAt(Position, Position + Front, Up);
     }
     
@@ -91,7 +90,8 @@ public:
         if(Zoom >= 45.0)
             Zoom = 45.0;
         if(Zoom <= 1.0)
-            Zoom = 1.0;    
+            Zoom = 1.0;
+        cout << Zoom << endl;
     }
     
     
@@ -102,8 +102,9 @@ private:
         front.y = glm::sin(glm::radians(Pitch));
         front.z = glm::cos(glm::radians(Pitch)) * glm::sin(glm::radians(Yaw));
         Front = glm::normalize(front);
+        
         Right = glm::normalize(glm::cross(Front, worldUp));
-        Up = glm::normalize(glm::cross(Right, Front));        
+        Up = glm::normalize(glm::cross(Right, Front));
     }
 };
 
