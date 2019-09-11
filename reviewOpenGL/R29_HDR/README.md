@@ -1,1 +1,1 @@
-&emsp;&emsp;There are nothing new besides the tutorial's codes. I add the up and down key to control the exposuer value.
+&emsp;&emsp;There are nothing new besides the tutorial's codes. I add the up and down key to control the exposuer value. To get the HDR effect, we firstly use sRGB format to read the texture and the use 1/gamma function in fragment shader to return the light strength(if not it will be dark). After doing that, we can use exposure function (1 - exp(-Color * exposure)) to get proper effect
