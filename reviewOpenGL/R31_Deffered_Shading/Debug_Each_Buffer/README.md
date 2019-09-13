@@ -1,0 +1,1 @@
+The model position is as same as tutorial. Because the specular effect needs source light to display, so you only can get gray effect even if you try to use specular buffer to render.
