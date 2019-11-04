@@ -1,16 +1,16 @@
 #### I have some confusions in learning the omnidirectional shadow and I list them in following:
 #####&emsp;&emsp;1. The up vector of shadowTransform array
-&emsp;&emsp;It's because the cube texture coordinate. Look at the following picture:
+&emsp;&emsp;It's because the cube texture coordinate. Look at the following legend (y means up here):
 ![Cube_Texture_Coordinate](cube_texture_coordinate.png)
 That's why the positive X's up vector needs to be vec3 ( 0.0, -1.0, 0.0 ), and it can be used in other faces. It's little bit difficult to verify it because you have to adjust the direction (plus or minus) and the displacement.
 &emsp;&emsp;For the light position vec3 ( 0.0, 0.0, 0.0 ), you can just do this in geometry shader when your shadowTransform is :
 ```C++
-shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 1.0,  0.0,  0.0), glm::vec3(0.0, 1.0, 0.0)));    // right
-shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0,  0.0,  0.0), glm::vec3(0.0, 1.0, 0.0)));    // left
-shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0,  1.0,  0.0), glm::vec3(0.0, 0.0, -1.0)));     // up
-shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, -1.0,  0.0), glm::vec3(0.0, 0.0, 1.0)));    // bottom
-shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0,  0.0,  1.0), glm::vec3(0.0, 1.0, 0.0)));    // front
-shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0,  0.0, -1.0), glm::vec3(0.0, 1.0, 0.0)));    // back
+shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 1.0,  0.0,  0.0), glm::vec3(0.0, -1.0, 0.0)));    // right
+shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3(-1.0,  0.0,  0.0), glm::vec3(0.0, -1.0, 0.0)));    // left
+shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0,  1.0,  0.0), glm::vec3(0.0, 0.0, 1.0)));     // up
+shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0, -1.0,  0.0), glm::vec3(0.0, 0.0, -1.0)));    // bottom
+shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0,  0.0,  1.0), glm::vec3(0.0, -1.0, 0.0)));    // front
+shadowTransform.push_back(shadowProj * glm::lookAt(lightPos, lightPos + glm::vec3( 0.0,  0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));    // back
 ```
 &emsp;&emsp;The geometry codes:
 ```GLSL
