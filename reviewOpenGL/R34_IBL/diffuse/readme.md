@@ -23,21 +23,17 @@ void main()
     FragColor = vec4(color, 1.0);
 }
 ```
-&emsp;&emsp;To understand the code, we can use two examples.
-&emsp;&emsp;Take localPos = vec3(0, 0, 1), then we can get uv = vec2(0.75, 0.5). Take localPos = vec3(0, 1, 0), then we can get uv = vec2(0.5, 1)
-&emsp;&emsp;```atan(v.z, v.x)``` means arctan(z/x), which can get the radians of the angle between z and x (beginning from x). 
-&emsp;&emsp;```const vec2 invAtan = vec2(0.1591, 0.3183);``` means vec2(1/2π, 1/π) and can be understood as creating a sphere needs 2π in x-v coordinate and π in y coordinate like following legend:
-![pic1](pics/pic1.png)
-&emsp;&emsp;According to the two example, we can know that the angle between the z and x is α and the angle between y and x is β like following legend:
-![pic2](pics/pic2.png)
-&emsp;&emsp;As for 
-```GLSL
-    vec2 uv = vec2(atan(v.z, v.x), asin(v.y));
-    uv *= invAtan;
-    uv += 0.5;
-```
-it calculates the u and v coordinate by angles, invAtan and a offset (0.5). The invAtan can be seen as a unit. α * (1/2π) can be seen as u coordinate in equirectangular and β * (1/π) is v coordinate. Like following legend:
-![pic3](pics/pic3.png)
+&emsp;&emsp;First of all we need to know the ```vec2(0.1591, 0.3183)```is ```vec2(1/2π, 1/π)```. To understand the code, we can observe the following equirectangular first (referenced from learnopengl):
+
+![pic8](pics/pic8.png)
+&emsp;&emsp;Then we can divide the legend into 6 area (viewer is outside the cube) and add the coordinate:
+![pic9](pics/pic9.png)
+And the 3d coordinate is:
+![pic10](pics/pic10.png)
+&emsp;&emsp;The main idea to understand the algorithm is to use [0, 2π] between x and z in 3d coordinate to represent [0.0, 1.0] in 2d coordinate x-value and use [0, π] between x and y in 3d coordinate to represent [0.0, 1.0] in 2d coordinate y-value.
+&emsp;&emsp;We start from the left area of the right area's center (0.0, 0.5).  In the 3d coordinate, this center point should be (1.0, 0.0, 0.0). The we move the center point of the right area to the back area center point which is represented by (0.25, 0.5) in 2d coordinate and (0.0, 0.0, -1.0) in 3d coordinate. The 2d x axis is add up to 0.25 from 0.0, but reduce from 1.0 to 0.0. During this process, we go through π/2 from (1.0, 0.0, 0.0) to (0.0, 0.0, -1.0) in 3d and 0.25 in 2d. Thus we can use π/2 to get 0.25 by doing ```(π/2) * (1/2π)```. But how can we get the angle(radian) between (1.0, 0.0, 0.0) and (0.0, 0.0, -1.0)? Image the process of moving (1.0, 0.0, 0.0) to (0.0, 0.0, -1.0) on a circle, you can find that x value is decreasing in positive direction and the z value is increasing in negative direction, and in the meantime the angle is increasing. It's tangent! So we can use atan(z-value, x-value) to calculate the angle(radian). Because ```-arctan(x) = arctan(-x)```, so we can use (0.0, 0.0, 1.0) instead of (0.0, 0.0, -1.0) to get the same result. But if we use (0.0, 0.0, 1.0), the 2d coordinate should be (0.75, 0.5) instead of (0.25, 0.5), so we need to add 0.5 to the 2d x-value. That's the why we use atan(z, x) as 2d x-value and then multiply 1/2π and add 0.5 on x-value.
+&emsp;&emsp;As for y-value in 2d coordinate, we assump that (x, 0.0) and (x, 1.0) correspond to (x, -1.0, z) and (x, 1.0, z). If y-value in 3d moves to (x, 1.0, z) starting from the (x, -1.0, z), it will go through from 0π to π. 
+If we can get the angle, the we can get the 2d coordinate. ```y = -arccos(x) + π (x ∈ [-1, 1], y ∈ [0, π])``` can achieve this. And ```y = -arccos(x) + π (x ∈ [-1, 1], y ∈ [0, π])``` is exactly equals to ```y = arcsin(x) + π/2```. Thus if we multiply 1/π with the latter equation, we can get the 2d coordinate y-value ∈ [0, 1]. That's the why we use asin(y) as 2d y-value and then multiply 1/π and add 0.5 on y-value.
 
 #### 2. understanding of dω(area) in reflection integral
 &emsp;&emsp;The following legend and equation are referred from [learnOpenGL.com](learnopengl.com):
