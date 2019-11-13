@@ -1,1 +1,0 @@
-#### 1. 轻易使用 GL_SRGB 格式读取图片会导致 normal 纹理错位，因此最好在 shader 中实现伽马矫正 (Loading normal texture by GL_SRGB format can lead mistakes. Thus it's better to use gamma correction in shader.)
